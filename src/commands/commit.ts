@@ -81,6 +81,8 @@ export async function runCommitWorkflow() {
   try {
     await makeCommit(message);
     console.log(colors.success("✅ Commit realized successfully!"));
+
+    setTimeout(() => {}, 2000);
   } catch (err) {
     console.log(colors.error("❌ Error commiting:"), err);
   }
