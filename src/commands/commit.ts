@@ -1,12 +1,20 @@
 import inquirer from "inquirer";
 import { colors } from "../lib/colors";
 import { commitTypes } from "../lib/types";
-import { hasChanges, makeCommit } from "../lib/git";
+import {
+  configureRemoteIfMissing,
+  ensureGitRepo,
+  hasChanges,
+  makeCommit,
+} from "../lib/git";
 import { buildCommitMessage, getPreview } from "../lib/messages";
 
 export async function runCommitWorkflow() {
   console.clear();
   console.log(colors.header("📦 Dev CLI\n"));
+
+  await ensureGitRepo();
+  await configureRemoteIfMissing();
 
   const hasStaged = await hasChanges();
   if (!hasStaged) {
