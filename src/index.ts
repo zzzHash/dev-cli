@@ -13,14 +13,25 @@ async function main() {
       name: "action",
       message: "What do you want to do?",
       choices: [
-        { name: "1) Create or manage a feature branch", value: "branch" },
-        { name: "2) Make a commit (Conventional Commits)", value: "commit" },
+        { name: "[ 1 ] Create or manage a feature branch", value: "branch" },
+        { name: "[ 2 ] Make a commit (Conventional Commits)", value: "commit" },
+        { name: "[ 3 ] Exit", value: "exit" },
       ],
     },
   ]);
 
-  if (action === "branch") await runBranchWorkflow();
-  if (action === "commit") await runCommitWorkflow();
+  if (action === "exit") {
+    console.log("👋 Bye!");
+    process.exit(0);
+  }
+  if (action === "branch") {
+    await runBranchWorkflow();
+    await main();
+  }
+  if (action === "commit") {
+    await runCommitWorkflow();
+    await main();
+  }
 }
 
 main();

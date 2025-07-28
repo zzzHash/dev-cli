@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "bin": {
+    "dev-cli": "src/index.ts"
+  },
   "scripts": {
     "dev": "bun run src/index.ts --watch"
   },

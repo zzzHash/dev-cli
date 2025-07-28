@@ -1,21 +1,31 @@
 import inquirer from "inquirer";
 import { $ } from "execa";
 import { colors } from "../lib/colors";
+import { listBranches } from "../lib/git";
 
 export async function runBranchWorkflow() {
   console.log(colors.label("\n🔀 Feature Branch Workflow\n"));
+
+  await listBranches();
 
   const { step } = await inquirer.prompt([
     {
       type: "list",
       name: "step",
       message: "What do you want to do?",
+      default: "create",
       choices: [
-        { name: "Create and switch to a new feature branch", value: "create" },
-        { name: "Merge current feature branch to main", value: "merge" },
+        {
+          name: "[ 1 ] Create and switch to a new feature branch",
+          value: "create",
+        },
+        { name: "[ 2 ] Merge current feature branch to main", value: "merge" },
+        { name: "[ 3 ] Go back", value: "back" },
       ],
     },
   ]);
+
+  if (step === "back") return;
 
   if (step === "create") {
     const { name } = await inquirer.prompt([

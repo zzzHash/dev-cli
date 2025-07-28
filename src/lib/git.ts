@@ -119,3 +119,21 @@ export async function makeCommit(message: string) {
     console.error(colors.error("❌ Failed to get remote info."), err);
   }
 }
+
+export async function listBranches() {
+  try {
+    const { stdout } = await $`git branch --list`;
+    console.log(colors.label("\n📋 Available branches:\n"));
+    stdout.split("\n").forEach((line) => {
+      if (line.trim() === "") return;
+      const isCurrent = line.startsWith("*");
+      if (isCurrent) {
+        console.log(colors.success(`> ${line.trim()}`)); // branch atual destacado
+      } else {
+        console.log(`  ${line.trim()}`);
+      }
+    });
+  } catch (err) {
+    console.error(colors.error("❌ Could not list branches"), err);
+  }
+}

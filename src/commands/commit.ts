@@ -27,12 +27,19 @@ export async function runCommitWorkflow() {
       type: "list",
       name: "type",
       message: "Choose a commit type:",
-      choices: Object.entries(commitTypes).map(([key, { emoji, desc }]) => ({
-        name: `${emoji}  ${key} - ${desc}`,
-        value: key,
-      })),
+      pageSize: 10,
+      default: "feat",
+      choices: [
+        ...Object.entries(commitTypes).map(([key, { emoji, desc }]) => ({
+          name: `${key} - ${emoji} ${desc}`,
+          value: key,
+        })),
+        { name: "[ Back ]     - Go back", value: "back" },
+      ],
     },
   ]);
+
+  if (type === "back") return;
 
   const { scope } = await inquirer.prompt([
     {
