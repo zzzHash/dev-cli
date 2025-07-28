@@ -2,6 +2,7 @@ import inquirer from "inquirer";
 import { $ } from "execa";
 import { colors } from "../lib/colors";
 import { listBranches } from "../lib/git";
+import { delay, minToMs } from "../lib/utils";
 
 export async function runBranchWorkflow() {
   console.log(colors.label("\n🔀 Feature Branch Workflow\n"));
@@ -42,8 +43,10 @@ export async function runBranchWorkflow() {
     try {
       await $`git checkout -b ${branchName}`;
       console.log(colors.success(`✅ Switched to new branch: ${branchName}`));
+      await delay(minToMs(5));
     } catch (err) {
       console.error(colors.error("❌ Error creating branch:"), err);
+      await delay(minToMs(5));
     }
   }
 
@@ -52,6 +55,7 @@ export async function runBranchWorkflow() {
 
     if (!currentBranch.startsWith("feat/")) {
       console.log(colors.warning("⚠️  You are not on a feature branch."));
+      await delay(minToMs(5));
       return;
     }
 
@@ -66,8 +70,10 @@ export async function runBranchWorkflow() {
           "✅ Feature branch merged into main and deleted locally."
         )
       );
+      await delay(minToMs(5));
     } catch (err) {
       console.error(colors.error("❌ Merge failed:"), err);
+      await delay(minToMs(15));
     }
   }
 }

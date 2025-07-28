@@ -8,6 +8,7 @@ import {
   makeCommit,
 } from "../lib/git";
 import { buildCommitMessage, getPreview } from "../lib/messages";
+import { delay, minToMs } from "../lib/utils";
 
 export async function runCommitWorkflow() {
   console.clear();
@@ -19,6 +20,7 @@ export async function runCommitWorkflow() {
   const hasStaged = await hasChanges();
   if (!hasStaged) {
     console.log(colors.warning("⚠️  Nothing to commit!"));
+    await delay(minToMs(5));
     process.exit(0);
   }
 
@@ -73,6 +75,7 @@ export async function runCommitWorkflow() {
 
   if (!confirm) {
     console.log(colors.warning("❌ Canceled commit."));
+    await delay(minToMs(5));
     process.exit(0);
   }
 
@@ -81,8 +84,7 @@ export async function runCommitWorkflow() {
   try {
     await makeCommit(message);
     console.log(colors.success("✅ Commit realized successfully!"));
-
-    setTimeout(() => {}, 5000);
+    await delay(minToMs(5));
   } catch (err) {
     console.log(colors.error("❌ Error commiting:"), err);
   }
