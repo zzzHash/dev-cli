@@ -36,7 +36,7 @@ export async function configureRemoteIfMissing() {
         type: "confirm",
         name: "setRemote",
         message: "No remote repository is configured. Do you want to add one?",
-        default: false,
+        default: true,
       },
     ]);
 

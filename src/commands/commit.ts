@@ -6,11 +6,11 @@ import { buildCommitMessage, getPreview } from "../lib/messages";
 
 export async function runCommitWorkflow() {
   console.clear();
-  console.log(colors.header("📦 Commit CLI - Conventional Commits\n"));
+  console.log(colors.header("📦 Dev CLI\n"));
 
   const hasStaged = await hasChanges();
   if (!hasStaged) {
-    console.log(colors.warning("⚠️  Nada para commitar!"));
+    console.log(colors.warning("⚠️  Nothing to commit!"));
     process.exit(0);
   }
 
@@ -18,7 +18,7 @@ export async function runCommitWorkflow() {
     {
       type: "list",
       name: "type",
-      message: "Escolha o tipo de commit:",
+      message: "Choose a commit type:",
       choices: Object.entries(commitTypes).map(([key, { emoji, desc }]) => ({
         name: `${emoji}  ${key} - ${desc}`,
         value: key,
@@ -30,7 +30,7 @@ export async function runCommitWorkflow() {
     {
       type: "input",
       name: "scope",
-      message: "Escopo (opcional):",
+      message: "Scope (optional):",
     },
   ]);
 
@@ -38,28 +38,26 @@ export async function runCommitWorkflow() {
     {
       type: "input",
       name: "description",
-      message: "Descrição do commit:",
+      message: "Commit description:",
       validate: (input: string) =>
-        input.trim() !== "" ? true : "Descrição obrigatória.",
+        input.trim() !== "" ? true : "Commit description cannot be empty.",
     },
   ]);
 
   const preview = getPreview(type, scope, description);
-  console.log(
-    `\n${colors.label("Prévia da mensagem:")} ${colors.border(preview)}\n`
-  );
+  console.log(`\n${colors.label("Preview:")} ${colors.border(preview)}\n`);
 
   const { confirm } = await inquirer.prompt([
     {
       type: "confirm",
       name: "confirm",
-      message: "Confirmar commit?",
+      message: "Confirm commit?",
       default: true,
     },
   ]);
 
   if (!confirm) {
-    console.log(colors.warning("❌ Commit cancelado."));
+    console.log(colors.warning("❌ Canceled commit."));
     process.exit(0);
   }
 
@@ -67,8 +65,8 @@ export async function runCommitWorkflow() {
 
   try {
     await makeCommit(message);
-    console.log(colors.success("✅ Commit realizado com sucesso!"));
+    console.log(colors.success("✅ Commit realized successfully!"));
   } catch (err) {
-    console.log(colors.error("❌ Erro ao realizar commit:"), err);
+    console.log(colors.error("❌ Error commiting:"), err);
   }
 }
